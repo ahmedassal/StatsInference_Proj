@@ -2,6 +2,8 @@
 title: "Statistical Inference Project Part 1"
 Date: Dec. 21st. 2014
 output:
+  html_document:
+    toc: yes
   pdf_document:
     fig_caption: yes
     highlight: tango
@@ -58,4 +60,7 @@ geom_vline(xintercept = expoDistributionMean,colour="red",size=2) +
 xlab("Exponential Means") +
 ggtitle("Histogram of the means of simulated exponential distributions") 
 ```
-It is obvious that the simulated distribution of exponentials (pink bins) can be approximiated as a normal distribution (blue curve).
+It is obvious that the simulated distribution of exponentials (pink bins) can be approximiated as a normal distribution (blue curve). I have illustrated via simulation and associated explanatory text that the properties of the distribution of the mean of 40 exponential(0.2)s is as follows   
+- The simulated distribution is approximately centered at the theoretical center of the distribution.  
+- The simulated distribution is of a variance that is very close to the theoretical variance of the distribution.  
+- The simulated distribution is can be approximiated as a normal distribution.  

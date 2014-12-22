@@ -3,6 +3,9 @@ title: "Statistical Inference Project Part 2"
 Date: Dec. 21st. 2014
 output:
   html_document:
+    fig_caption: yes
+    number_sections: yes
+    theme: spacelab
     toc: yes
   pdf_document:
     fig_caption: yes
@@ -12,52 +15,70 @@ output:
 Author: Ahmed Assal
 ---
 ## Synopsis
-This is the project for the statistical inference class. In it, you will use simulation to explore inference. This is the first part of the project which is a simulation exercise. 
+This is the project for the statistical inference class.  This is the second part of the project which is an analysis of the ToothGrowth data. 
 
-The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also also 1/lambda. Set lambda = 0.2 for all of the simulations. In this simulation, I will investigate the distribution of averages of 40 exponential(0.2)s. Note that I will do a thousand simulated averages of 40 exponentials to illustrate via simulation and associated explanatory text the properties of the distribution of the mean of 40 exponential(0.2)s.
+In the second portion of the class, I am going to analyze the ToothGrowth data in the R datasets package.
 
-## Simulation
-```{r}
-# setting lamda the rate
-lambda = 0.2
+## Data Description    
+The response is the length of odontoblasts (teeth) in each of 10 guinea pigs at each of three dose levels of Vitamin C (0.5, 1, and 2 mg) with each of two delivery methods (orange juice or ascorbic acid).
 
-# number of samples
-nSamples = 40
+[,1]   len   numeric	 Tooth length   
+[,2]	 supp	 factor	 Supplement type (VC or OJ).   
+[,3]	 dose	 numeric	 Dose in milligrams.   
+*(source: R Doumentation)*  
 
-# number of simulations
-nSimulations = 2000
-
-# simulating
-expoMeans = NULL
-for( i in 1:nSimulations) expoMeans = c(expoMeans, mean(rexp(40, rate = lambda)))
-
-```
-
-## Questions
-### Q1-Comparing the simulation distribution center to the theoretical center of the distribution.
-```{r}
-expoDistributionMean = mean(expoMeans)
-```
-
-The simulation distribution mean is **`r expoDistributionMean`** which is pretty close to the theoritical distribution mean which is **`r 1/lambda`**      
-
-### Q2-Comparing the simulation distribution variance to the theoretical variance of the distribution.
-```{r}
-expoDistributionSD = sd(expoMeans)
-```
-The simulation distribution standard deviation is **`r expoDistributionSD`** which is pretty close to the theoritical distribution standard deviation which is **`r 1/lambda * 1/sqrt(nSamples)`**    
-
-### Q3-Showing that the simulation distribution is approximately normal.
-
-```{r}
+## Data Processing
+### Loading packages and libraries   
+```{r results='hide'}
 library(ggplot2)
-expoMeansDataframe = data.frame(expoMeans)
-ggplot(expoMeansDataframe, aes(x= expoMeansDataframe$expoMeans)) + 
-geom_histogram(aes(y=..density..), colour="black", fill="violet",  binwidth = 2 * lambda) + 
-stat_function(fun = dnorm, colour = "blue", alpha =0.5, size = 1,  fill = "yellow", 
-      args = list(mean = expoDistributionMean, sd = expoDistributionSD)) +
-geom_vline(xintercept = expoDistributionMean,colour="red",size=2) +
-xlab("Exponential Means") +
-ggtitle("Histogram of the means of simulated exponential distributions") 
+library(datasets)
+library(reshape2)
+library(dplyr)
 ```
-It is obvious that the simulated distribution of exponentials (pink bins) can be approximiated as a normal distribution (blue curve).
+### Loading dataset
+```{r}
+toothGrowth = tbl_df(ToothGrowth)
+```
+
+## Anaylsis
+### Summarizing Data
+
+```{r}
+glimpse(toothGrowth)
+summary(toothGrowth)
+head(toothGrowth,3); tail(toothGrowth,3)
+```
+
+### Exploratory Data Analysis
+#### Tooth length vs supplement type
+
+Fisrt, I will explore the relaion between the supplement type and the lenth of tooth
+    
+```{r}
+ggplot(data=toothGrowth, aes(x=len)) + 
+  geom_histogram(binwidth=2) +
+  facet_grid( . ~ supp) +
+  xlab("Tooth Length") +
+  ylab("Count")
+```   
+
+It seems that both supplements have similar effects on the length of tooth, however, the orange juice, OJ, has more profound effect on most of the teeth    
+
+#### Tooth length vs dosage    
+I will then explore the effect of the dosage quantity on the length of the tooth while examinning this effect for both of the supplements.    
+
+```{r}
+ggplot(data=toothGrowth, aes(x=as.factor(dose), y=len, fill=supp)) + 
+  geom_bar(stat="identity") +
+  xlab("Dosage (mg)") +
+  ylab("Tooth Length") +
+  guides(fill=guide_legend(title="Supplement Type"))
+```     
+
+As the dosage increases so does the length of the tooth, however, again the orange juice, the OJ supplement has a stronger effect on the tooth length.
+
+### Comparison of tooth growth by supp and dose   
+    Did the student perform some relevant confidence intervals and/or tests?Were the results of the tests and/or intervals interpreted in the context of the problem correctly? 
+
+## Conslusions and Assumptions        
+    Did the student describe the assumptions needed for their conclusions?
