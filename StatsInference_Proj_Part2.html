@@ -167,12 +167,75 @@ library(dplyr)</code></pre>
 </div>
 <div id="comparison-of-tooth-growth-by-supp-and-dose" class="section level3">
 <h3><span class="header-section-number">0.4.3</span> Comparison of tooth growth by supp and dose</h3>
-<pre><code>Did the student perform some relevant confidence intervals and/or tests?Were the results of the tests and/or intervals interpreted in the context of the problem correctly? </code></pre>
+<div id="groups-based-on-supplement" class="section level4">
+<h4><span class="header-section-number">0.4.3.1</span> Groups based on supplement</h4>
+<div id="extracting-groups" class="section level5">
+<h5><span class="header-section-number">0.4.3.1.1</span> Extracting Groups</h5>
+<pre class="r"><code>oj= subset(toothGrowth, supp==&quot;OJ&quot;)$len
+vc= subset(toothGrowth, supp==&quot;VC&quot;)$len</code></pre>
+</div>
+<div id="are-groups-of-different-variance" class="section level5">
+<h5><span class="header-section-number">0.4.3.1.2</span> Are groups of different variance ?</h5>
+<pre class="r"><code>var(oj);var(vc)</code></pre>
+<pre><code>## [1] 43.63344</code></pre>
+<pre><code>## [1] 68.32723</code></pre>
+<p>The variance is different for all groups created based on supplement<br />##### Comparing the supplement groups using T Test</p>
+<pre class="r"><code>test= t.test(len ~ supp, paired = FALSE, val.equal = FALSE, data = toothGrowth)
+test$conf</code></pre>
+<pre><code>## [1] -0.1710156  7.5710156
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+</div>
+</div>
+<div id="groups-based-on-supplement-and-dosage" class="section level4">
+<h4><span class="header-section-number">0.4.3.2</span> Groups based on supplement and dosage</h4>
+<div id="extracting-groups-1" class="section level5">
+<h5><span class="header-section-number">0.4.3.2.1</span> Extracting Groups</h5>
+<pre class="r"><code>oj05= subset(toothGrowth, dose ==0.5 &amp; supp==&quot;OJ&quot;)$len
+oj1= subset(toothGrowth, dose ==1 &amp; supp==&quot;OJ&quot;)$len
+oj2= subset(toothGrowth, dose ==2 &amp; supp==&quot;OJ&quot;)$len
+
+
+vc05= subset(toothGrowth, dose ==0.5 &amp; supp==&quot;VC&quot;)$len
+vc1= subset(toothGrowth, dose ==1 &amp; supp==&quot;VC&quot;)$len
+vc2= subset(toothGrowth, dose ==2 &amp; supp==&quot;VC&quot;)$len</code></pre>
+</div>
+<div id="are-groups-of-different-variance-1" class="section level5">
+<h5><span class="header-section-number">0.4.3.2.2</span> Are groups of different variance ?</h5>
+<pre class="r"><code>var(oj05);var(oj1);var(oj2)</code></pre>
+<pre><code>## [1] 19.889</code></pre>
+<pre><code>## [1] 15.29556</code></pre>
+<pre><code>## [1] 7.049333</code></pre>
+<pre class="r"><code>var(vc05);var(vc1);var(vc2)</code></pre>
+<pre><code>## [1] 7.544</code></pre>
+<pre><code>## [1] 6.326778</code></pre>
+<pre><code>## [1] 23.01822</code></pre>
+<p>The variance is different for all groups created based on supplement and dosage</p>
+</div>
+</div>
+<div id="groups-based-on-dosage" class="section level4">
+<h4><span class="header-section-number">0.4.3.3</span> Groups based on dosage</h4>
+<div id="extracting-groups-2" class="section level5">
+<h5><span class="header-section-number">0.4.3.3.1</span> Extracting Groups</h5>
+<pre class="r"><code>dose05= subset(toothGrowth, dose ==0.5 )$len
+dose1= subset(toothGrowth, dose ==1)$len
+dose2= subset(toothGrowth, dose ==2)$len</code></pre>
+</div>
+<div id="are-groups-of-different-variance-2" class="section level5">
+<h5><span class="header-section-number">0.4.3.3.2</span> Are groups of different variance ?</h5>
+<pre class="r"><code>var(dose05);var(dose1);var(dose2)</code></pre>
+<pre><code>## [1] 20.24787</code></pre>
+<pre><code>## [1] 19.49608</code></pre>
+<pre><code>## [1] 14.24421</code></pre>
+<p>The variance is different for all groups created based on dosage</p>
+</div>
+</div>
 </div>
 </div>
 <div id="conslusions-and-assumptions" class="section level2">
 <h2><span class="header-section-number">0.5</span> Conslusions and Assumptions</h2>
-<pre><code>Did the student describe the assumptions needed for their conclusions?</code></pre>
+<pre><code>Did the student describe the assumptions needed for their conclusions?
+- The variance differes among the different groups, as calculated.</code></pre>
 </div>
 
 

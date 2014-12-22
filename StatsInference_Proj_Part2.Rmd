@@ -78,7 +78,63 @@ ggplot(data=toothGrowth, aes(x=as.factor(dose), y=len, fill=supp)) +
 As the dosage increases so does the length of the tooth, however, again the orange juice, the OJ supplement has a stronger effect on the tooth length.
 
 ### Comparison of tooth growth by supp and dose   
-    Did the student perform some relevant confidence intervals and/or tests?Were the results of the tests and/or intervals interpreted in the context of the problem correctly? 
+#### Groups based on supplement
+##### Extracting Groups
+```{r}
+oj= subset(toothGrowth, supp=="OJ")$len
+vc= subset(toothGrowth, supp=="VC")$len
+
+```    
+##### Are groups of different variance ?
+```{r}
+var(oj);var(vc)
+
+```   
+The variance is different for all groups created based on supplement    
+##### Comparing the supplement groups using T Test   
+```{r}
+test= t.test(len ~ supp, paired = FALSE, val.equal = FALSE, data = toothGrowth)
+test$conf
+
+```    
+
+#### Groups based on supplement and dosage
+##### Extracting Groups
+```{r}
+oj05= subset(toothGrowth, dose ==0.5 & supp=="OJ")$len
+oj1= subset(toothGrowth, dose ==1 & supp=="OJ")$len
+oj2= subset(toothGrowth, dose ==2 & supp=="OJ")$len
+
+
+vc05= subset(toothGrowth, dose ==0.5 & supp=="VC")$len
+vc1= subset(toothGrowth, dose ==1 & supp=="VC")$len
+vc2= subset(toothGrowth, dose ==2 & supp=="VC")$len
+
+```    
+##### Are groups of different variance ?
+```{r}
+var(oj05);var(oj1);var(oj2)
+var(vc05);var(vc1);var(vc2)
+```   
+The variance is different for all groups created based on supplement and dosage    
+
+#### Groups based on dosage
+##### Extracting Groups
+```{r}
+dose05= subset(toothGrowth, dose ==0.5 )$len
+dose1= subset(toothGrowth, dose ==1)$len
+dose2= subset(toothGrowth, dose ==2)$len
+```    
+##### Are groups of different variance ?
+```{r}
+var(dose05);var(dose1);var(dose2)
+
+```   
+The variance is different for all groups created based on dosage    
+
 
 ## Conslusions and Assumptions        
     Did the student describe the assumptions needed for their conclusions?
+    - The variance differes among the different groups, as calculated.
+
+    
