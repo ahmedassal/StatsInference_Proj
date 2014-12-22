@@ -2,15 +2,15 @@
 title: "Statistical Inference Project Part 2"
 Date: Dec. 21st. 2014
 output:
-  html_document:
-    fig_caption: yes
-    number_sections: yes
-    theme: spacelab
-    toc: yes
   pdf_document:
     fig_caption: yes
     highlight: tango
     number_sections: yes
+    toc: yes
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    theme: spacelab
     toc: yes
 Author: Ahmed Assal
 ---
@@ -90,13 +90,15 @@ vc= subset(toothGrowth, supp=="VC")$len
 var(oj);var(vc)
 
 ```   
+
 The variance is different for all groups created based on supplement    
-##### Comparing the supplement groups using T Test   
+
+##### Comparing the supplement groups using T Test      
 ```{r}
 test= t.test(len ~ supp, paired = FALSE, val.equal = FALSE, data = toothGrowth)
-test$conf
 
 ```    
+The p-value is `r test$p.value` and the 95% confidence interval is `r test$conf` which suggests that there is no substantial difference between the tooth growth of those subjected to the two types of supplements, namely, OJ and VC, regardless of the dosage.   
 
 #### Groups based on supplement and dosage
 ##### Extracting Groups
@@ -118,23 +120,58 @@ var(vc05);var(vc1);var(vc2)
 ```   
 The variance is different for all groups created based on supplement and dosage    
 
+##### Comparing the supplement groups using T Test      
+```{r}
+testOJ05_1= t.test(x= oj1, y=oj05,  val.equal = FALSE)
+testOJ05_1$p.value; testOJ05_1$conf.int
+
+testOJ1_2= t.test(x= oj2, y=oj1,  val.equal = FALSE)
+testOJ1_2$p.value; testOJ1_2$conf.int
+
+testOJ05_2= t.test(x= oj2, y=oj05,  val.equal = FALSE)
+testOJ05_2$p.value; testOJ05_2$conf.int
+
+```    
+The p-values and the 95% confidence intervals suggest that as we increase the dosage the teeth growth increases for both supplements, however, the increase in the tooth growth is more aparent in the increase of the dosage from 0.5 to 1 or from 0.5 to 2. The increase in the dosage from 1 to 2 results in more increase in the tooth growth with the VC supplement more than that of the OJ supplement.   
+
 #### Groups based on dosage
 ##### Extracting Groups
 ```{r}
-dose05= subset(toothGrowth, dose ==0.5 )$len
-dose1= subset(toothGrowth, dose ==1)$len
-dose2= subset(toothGrowth, dose ==2)$len
+dose05_1= subset(toothGrowth, dose ==0.5|dose ==1)
+dose05_1$supp = NULL
+dose1_2= subset(toothGrowth, dose ==1|dose ==2 )
+dose1_2$supp = NULL
+dose05_2= subset(toothGrowth, dose ==0.5|dose ==2)
+dose05_2$supp = NULL
 ```    
 ##### Are groups of different variance ?
 ```{r}
-var(dose05);var(dose1);var(dose2)
+var(dose05_1);var(dose1_2);var(dose05_2)
 
 ```   
 The variance is different for all groups created based on dosage    
 
+##### Comparing the supplement groups using T Test      
+```{r}
+testD05_1= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose05_1)
+testD05_1$p.value; testD05_1$conf.int
 
-## Conslusions and Assumptions        
-    Did the student describe the assumptions needed for their conclusions?
+testD1_2= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose1_2)
+testD1_2$p.value; testD1_2$conf.int
+
+testD05_2= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose05_2)
+testD05_2$p.value; testD05_2$conf.int
+
+```    
+The p-values and the 95% confidence intervals suggest that there is no substantial difference between the tooth growth of the different dosages regardless of the supplement type.   
+
+## Assumptions and conclusions        
+    
     - The variance differes among the different groups, as calculated.
+    - The distribution of the observations in each group are normally distributed.
+    - These groups are not paired.
+    - It is obvious that the OJ supplement is more effective with the tooth growth than the VC supplement especially for the 0.5mg and 1mg dosage.
+    -It is also obvious that an increase in dosage shows an increase in the tooth growth with both supplements.
+    
 
     

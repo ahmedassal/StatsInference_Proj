@@ -67,7 +67,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <li><a href="#exploratory-data-analysis"><span class="toc-section-number">0.4.2</span> Exploratory Data Analysis</a></li>
 <li><a href="#comparison-of-tooth-growth-by-supp-and-dose"><span class="toc-section-number">0.4.3</span> Comparison of tooth growth by supp and dose</a></li>
 </ul></li>
-<li><a href="#conslusions-and-assumptions"><span class="toc-section-number">0.5</span> Conslusions and Assumptions</a></li>
+<li><a href="#assumptions-and-conclusions"><span class="toc-section-number">0.5</span> Assumptions and conclusions</a></li>
 </ul>
 </div>
 
@@ -179,12 +179,12 @@ vc= subset(toothGrowth, supp==&quot;VC&quot;)$len</code></pre>
 <pre class="r"><code>var(oj);var(vc)</code></pre>
 <pre><code>## [1] 43.63344</code></pre>
 <pre><code>## [1] 68.32723</code></pre>
-<p>The variance is different for all groups created based on supplement<br />##### Comparing the supplement groups using T Test</p>
-<pre class="r"><code>test= t.test(len ~ supp, paired = FALSE, val.equal = FALSE, data = toothGrowth)
-test$conf</code></pre>
-<pre><code>## [1] -0.1710156  7.5710156
-## attr(,&quot;conf.level&quot;)
-## [1] 0.95</code></pre>
+<p>The variance is different for all groups created based on supplement</p>
+</div>
+<div id="comparing-the-supplement-groups-using-t-test" class="section level5">
+<h5><span class="header-section-number">0.4.3.1.3</span> Comparing the supplement groups using T Test</h5>
+<pre class="r"><code>test= t.test(len ~ supp, paired = FALSE, val.equal = FALSE, data = toothGrowth)</code></pre>
+<p>The p-value is 0.0606345 and the 95% confidence interval is -0.1710156, 7.5710156 which suggests that there is no substantial difference between the tooth growth of those subjected to the two types of supplements, namely, OJ and VC, regardless of the dosage.</p>
 </div>
 </div>
 <div id="groups-based-on-supplement-and-dosage" class="section level4">
@@ -212,30 +212,86 @@ vc2= subset(toothGrowth, dose ==2 &amp; supp==&quot;VC&quot;)$len</code></pre>
 <pre><code>## [1] 23.01822</code></pre>
 <p>The variance is different for all groups created based on supplement and dosage</p>
 </div>
+<div id="comparing-the-supplement-groups-using-t-test-1" class="section level5">
+<h5><span class="header-section-number">0.4.3.2.3</span> Comparing the supplement groups using T Test</h5>
+<pre class="r"><code>testOJ05_1= t.test(x= oj1, y=oj05,  val.equal = FALSE)
+testOJ05_1$p.value; testOJ05_1$conf.int</code></pre>
+<pre><code>## [1] 8.784919e-05</code></pre>
+<pre><code>## [1]  5.524366 13.415634
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<pre class="r"><code>testOJ1_2= t.test(x= oj2, y=oj1,  val.equal = FALSE)
+testOJ1_2$p.value; testOJ1_2$conf.int</code></pre>
+<pre><code>## [1] 0.03919514</code></pre>
+<pre><code>## [1] 0.1885575 6.5314425
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<pre class="r"><code>testOJ05_2= t.test(x= oj2, y=oj05,  val.equal = FALSE)
+testOJ05_2$p.value; testOJ05_2$conf.int</code></pre>
+<pre><code>## [1] 1.323784e-06</code></pre>
+<pre><code>## [1]  9.324759 16.335241
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<p>The p-values and the 95% confidence intervals suggest that as we increase the dosage the teeth growth increases for both supplements, however, the increase in the tooth growth is more aparent in the increase of the dosage from 0.5 to 1 or from 0.5 to 2. The increase in the dosage from 1 to 2 results in more increase in the tooth growth with the VC supplement more than that of the OJ supplement.</p>
+</div>
 </div>
 <div id="groups-based-on-dosage" class="section level4">
 <h4><span class="header-section-number">0.4.3.3</span> Groups based on dosage</h4>
 <div id="extracting-groups-2" class="section level5">
 <h5><span class="header-section-number">0.4.3.3.1</span> Extracting Groups</h5>
-<pre class="r"><code>dose05= subset(toothGrowth, dose ==0.5 )$len
-dose1= subset(toothGrowth, dose ==1)$len
-dose2= subset(toothGrowth, dose ==2)$len</code></pre>
+<pre class="r"><code>dose05_1= subset(toothGrowth, dose ==0.5|dose ==1)
+dose05_1$supp = NULL
+dose1_2= subset(toothGrowth, dose ==1|dose ==2 )
+dose1_2$supp = NULL
+dose05_2= subset(toothGrowth, dose ==0.5|dose ==2)
+dose05_2$supp = NULL</code></pre>
 </div>
 <div id="are-groups-of-different-variance-2" class="section level5">
 <h5><span class="header-section-number">0.4.3.3.2</span> Are groups of different variance ?</h5>
-<pre class="r"><code>var(dose05);var(dose1);var(dose2)</code></pre>
-<pre><code>## [1] 20.24787</code></pre>
-<pre><code>## [1] 19.49608</code></pre>
-<pre><code>## [1] 14.24421</code></pre>
+<pre class="r"><code>var(dose05_1);var(dose1_2);var(dose05_2)</code></pre>
+<pre><code>##            len       dose
+## len  40.736000 1.17051282
+## dose  1.170513 0.06410256</code></pre>
+<pre><code>##            len      dose
+## len  26.825583 1.6320513
+## dose  1.632051 0.2564103</code></pre>
+<pre><code>##            len      dose
+## len  78.366660 5.9596154
+## dose  5.959615 0.5769231</code></pre>
 <p>The variance is different for all groups created based on dosage</p>
 </div>
+<div id="comparing-the-supplement-groups-using-t-test-2" class="section level5">
+<h5><span class="header-section-number">0.4.3.3.3</span> Comparing the supplement groups using T Test</h5>
+<pre class="r"><code>testD05_1= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose05_1)
+testD05_1$p.value; testD05_1$conf.int</code></pre>
+<pre><code>## [1] 1.268301e-07</code></pre>
+<pre><code>## [1] -11.983781  -6.276219
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<pre class="r"><code>testD1_2= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose1_2)
+testD1_2$p.value; testD1_2$conf.int</code></pre>
+<pre><code>## [1] 1.90643e-05</code></pre>
+<pre><code>## [1] -8.996481 -3.733519
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<pre class="r"><code>testD05_2= t.test(len ~ dose, paired = FALSE, val.equal = FALSE, data = dose05_2)
+testD05_2$p.value; testD05_2$conf.int</code></pre>
+<pre><code>## [1] 4.397525e-14</code></pre>
+<pre><code>## [1] -18.15617 -12.83383
+## attr(,&quot;conf.level&quot;)
+## [1] 0.95</code></pre>
+<p>The p-values and the 95% confidence intervals suggest that there is no substantial difference between the tooth growth of the different dosages regardless of the supplement type.</p>
 </div>
 </div>
 </div>
-<div id="conslusions-and-assumptions" class="section level2">
-<h2><span class="header-section-number">0.5</span> Conslusions and Assumptions</h2>
-<pre><code>Did the student describe the assumptions needed for their conclusions?
-- The variance differes among the different groups, as calculated.</code></pre>
+</div>
+<div id="assumptions-and-conclusions" class="section level2">
+<h2><span class="header-section-number">0.5</span> Assumptions and conclusions</h2>
+<pre><code>- The variance differes among the different groups, as calculated.
+- The distribution of the observations in each group are normally distributed.
+- These groups are not paired.
+- It is obvious that the OJ supplement is more effective with the tooth growth than the VC supplement especially for the 0.5mg and 1mg dosage.
+-It is also obvious that an increase in dosage shows an increase in the tooth growth with both supplements.</code></pre>
 </div>
 
 
